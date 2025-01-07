@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { IUser } from "../interfaces/user";
+import {hashSync} from 'bcrypt';
 
 export const registerUser = async (user: IUser) => {
     try {
@@ -15,7 +16,11 @@ export const registerUser = async (user: IUser) => {
         };
 
         const newUser = await prisma.user.create({
-            data: user
+            data:{
+                email: user.email,
+                name: user.name,
+                password: hashSync(user.password, 10)
+            }
         });
 
         return newUser;
@@ -26,3 +31,4 @@ export const registerUser = async (user: IUser) => {
     }
 
 }
+
