@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerUser, getUsers } from "../services/user.service";
+import { registerUser, getUsers, loginUser } from "../services/user.service";
 
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -30,5 +30,25 @@ export const allUsers = async(req: Request, res: Response) => {
             throw new Error(error.message);
         }
         
+    }
+}
+
+export const login = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+        const user = {
+            email,
+            password,
+            name: ""	
+        }
+
+        const existingUser = await loginUser(user);
+        res.status(200).json(existingUser);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: "An unknown error occurred" });
+        }
     }
 }
