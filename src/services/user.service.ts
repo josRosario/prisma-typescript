@@ -2,9 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { IUser } from "../interfaces/user";
 import {hashSync} from 'bcrypt';
 
+const prisma: PrismaClient = new PrismaClient();
+
 export const registerUser = async (user: IUser) => {
     try {
-        const prisma: PrismaClient = new PrismaClient();
         const existingUser = await prisma.user.findFirst({
             where: {
                 email: user.email
@@ -31,4 +32,16 @@ export const registerUser = async (user: IUser) => {
     }
 
 }
+
+export const getUsers = async () => {  
+    try {
+        const users = await prisma.user.findMany();
+        return users;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
+}
+
 
