@@ -7,8 +7,10 @@ exports.prisma = void 0;
 const express_1 = __importDefault(require("express"));
 const secrets_1 = require("./secrets");
 const client_1 = require("@prisma/client");
+const routes_1 = __importDefault(require("./routes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use('/api', routes_1.default);
 exports.prisma = new client_1.PrismaClient({
     log: ['query'],
 });
